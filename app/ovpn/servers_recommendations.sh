@@ -14,7 +14,7 @@ if [[ ! -v SERVER ]]; then
             echo "$(adddate) INFO: No country has been set. The default will be picked by NordVPN API. If you want to use a country, please use e.g. COUNTRY=it"
             #GET fastest server based on NordVPN API
             #https://nordvpn.com/wp-admin/admin-ajax.php?action=servers_recommendations
-            curl -s $SERVER_RECOMMENDATIONS_URL -o $JSON_FILE
+            curl -s --socks5 $SOCKS5 $SERVER_RECOMMENDATIONS_URL -o $JSON_FILE
         else
             echo "$(adddate) INFO: Your country setting will be used. This is set to: ${COUNTRY^^}"
 
@@ -26,7 +26,7 @@ if [[ ! -v SERVER ]]; then
                     export COUNTRY_CODE=$(cat $JSON_FILE_SERVER_COUNTRIES | jq '.[]  | select(.code == "'${COUNTRY^^}'") | .id')
                 else 
                     echo "$(adddate) INFO: The country codes are unknown, getting country codes from API"
-                    curl -s https://nordvpn.com/wp-admin/admin-ajax.php?action=servers_countries -o /tmp/servers_countries
+                    curl -s --socks5 $SOCKS5 https://nordvpn.com/wp-admin/admin-ajax.php?action=servers_countries -o /tmp/servers_countries
                     export COUNTRY_CODE=$(cat $JSON_FILE_SERVER_COUNTRIES | jq '.[]  | select(.code == "'${COUNTRY^^}'") | .id')
             fi
           
@@ -46,11 +46,11 @@ if [[ ! -v SERVER ]]; then
 # Otherwise, use the server that was specified
 else
     echo "$(adddate) INFO: SERVER has been set to ${SERVER^^}"
-    curl --silent https://api.nordvpn.com/server | jq '.[] | select(.domain == '\"$SERVER\"')' > $JSON_FILE
+    curl --silent --socks5 $SOCKS5 https://api.nordvpn.com/server | jq '.[] | select(.domain == '\"$SERVER\"')' > $JSON_FILE
 
     #Set vars
     export SERVERNAME="$(jq -r '.name' $JSON_FILE)"
-    export LOAD=$(curl -s $SERVER_STATS_URL$SERVER | jq -r '.[]')
+    export LOAD=$(curl -s --socks5 $SOCKS5 $SERVER_STATS_URL$SERVER | jq -r '.[]')
     export UPDATED_AT=""
     export IP="$(jq -r '.ip_address' $JSON_FILE)"
     echo "$SERVER" > /tmp/nordvpn_hostname
