@@ -1,7 +1,8 @@
 FROM alpine:3.10.1
 LABEL MAINTAINER "Jeroen Slot"
 
-ENV OVPN_FILES="https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip" \
+ENV SOCKS5="" \
+    OVPN_FILES="https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip" \
     OVPN_CONFIG_DIR="/app/ovpn/config" \
     SERVER_RECOMMENDATIONS_URL="https://nordvpn.com/wp-admin/admin-ajax.php?action=servers_recommendations" \
     SERVER_STATS_URL="https://nordvpn.com/api/server/stats/" \
