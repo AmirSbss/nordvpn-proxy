@@ -11,7 +11,7 @@ mkdir -p /app/ovpn/config
 rm -rf ${OVPN_CONFIG_DIR}/ovpn*
 
 #Curl download ovpn files from NordVPN
-curl -s -o ${OVPN_CONFIG_DIR}/ovpn.zip ${OVPN_FILES}
+curl -s -o --socks5 ${SOCKS5} ${OVPN_CONFIG_DIR}/ovpn.zip ${OVPN_FILES}
 
 #Unzip files
 unzip -q ${OVPN_CONFIG_DIR}/ovpn.zip -d ${OVPN_CONFIG_DIR}
