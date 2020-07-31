@@ -3,7 +3,7 @@
 . /app/date.sh --source-only
 
 nordvpn_hostname=$(cat /tmp/nordvpn_hostname)
-server_load=$(curl -s $SERVER_STATS_URL$nordvpn_hostname | jq -r '.[]')
+server_load=$(curl -s --socks5 $SOCKS5 $SERVER_STATS_URL$nordvpn_hostname | jq -r '.[]')
 
 #Check serverload value is not empty
 if [ -z "$server_load" ];then
